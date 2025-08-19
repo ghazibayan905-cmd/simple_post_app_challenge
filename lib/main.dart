@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:simple_post_app_challenge/views/pages/home/homescreen.dart';
 import 'package:simple_post_app_challenge/views/pages/postScreen.dart';
+import 'package:simple_post_app_challenge/views/pages/savePost.dart';
 
 void main() {
   runApp(const MyApp());
@@ -43,7 +44,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
         theme: ThemeData(),
-        home: const Postscreen(),
+        home: const Savepost(),
       ),
     );
   }
