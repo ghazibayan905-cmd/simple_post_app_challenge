@@ -11,11 +11,11 @@ class Homescreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 188, 188, 189),
+      backgroundColor: Colors.transparent,
       appBar: AppBar(
         actions: [
           Padding(
-            padding:  EdgeInsets.only(right: 9.w),
+            padding: EdgeInsets.only(right: 9.w),
             child: SvgPicture.asset(Appimage.create_note),
           ),
         ],
@@ -28,13 +28,25 @@ class Homescreen extends StatelessWidget {
             children: [
               Center(child: Image.asset(Appimage.socialhub)),
               SizedBox(height: 20.h),
-              CustomContainer(),
+              CustomContainer(
+                Text1:
+                    "sunt aut facere repellat provident occaecatiexcepturi optio reprehenderit",
+              ),
               SizedBox(height: 22.h),
-              CustomContainer(),
+              CustomContainer(
+                Text1:
+                    "sunt aut facere repellat provident occaecatiexcepturi optio reprehenderit",
+              ),
               SizedBox(height: 22.h),
-              CustomContainer(),
+              CustomContainer(
+                Text1:
+                    "sunt aut facere repellat provident occaecatiexcepturi optio reprehenderit",
+              ),
               SizedBox(height: 22.h),
-              CustomContainer(),
+              CustomContainer(
+                Text1:
+                    "sunt aut facere repellat provident occaecatiexcepturi optio reprehenderit",
+              ),
             ],
           ),
         ),

@@ -2,27 +2,32 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:simple_post_app_challenge/core/appColors.dart';
 
-class CustomContainer extends StatelessWidget {
-  final String? Text1;
+class BaseContainer extends StatelessWidget {
+  final String? Text2;
+  final String? Text3;
   final IconData? icon;
   final EdgeInsetsGeometry? padding;
-  const CustomContainer({this.Text1, this.icon, this.padding});
+  const BaseContainer({this.Text2, this.icon, this.padding, this.Text3});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.only(left: 7.w, right: 10.w),
       width: 387.w,
-      height: 160.h,
+      height: 250.h,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20.r),
         color: AppColors.background,
       ),
       child: Column(
         children: [
-          Icon(icon, color: Colors.red, size: 30),
+          Padding(
+            padding: EdgeInsets.only(left: 335.w, top: 13.h),
+            child: Icon(icon, color: Colors.red, size: 30),
+          ),
+          SizedBox(height: 13),
           Text(
-            Text1 ?? "",
+            Text2 ?? "",
             style: TextStyle(
               fontSize: 15.sp,
               color: AppColors.green,
@@ -32,7 +37,7 @@ class CustomContainer extends StatelessWidget {
           ),
           SizedBox(height: 15.h),
           Text(
-            Text1 ?? "",
+            Text3 ?? "",
 
             style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.normal),
             softWrap: true,

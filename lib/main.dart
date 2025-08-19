@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:simple_post_app_challenge/views/pages/home/homescreen.dart';
+import 'package:simple_post_app_challenge/views/pages/postScreen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,14 +17,33 @@ class MyApp extends StatelessWidget {
       designSize: Size(411, 915),
       minTextAdapt: true,
       splitScreenMode: true,
+      builder: (context, child) {
+        return Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomRight,
+              colors: [
+                Color.fromRGBO(216, 225, 233, 0),
+                Color.fromRGBO(47, 61, 74, 0),
+                Color.fromRGBO(47, 61, 74, 0),
+                Color.fromRGBO(12, 181, 149, 0.34),
+                Color.fromRGBO(12, 181, 149, 0.47),
+                Color.fromRGBO(12, 181, 149, 0.47),
+                Color.fromRGBO(12, 181, 149, 0.40),
+              ],
+            ),
+          ),
+
+          child: child,
+        );
+      },
 
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        ),
-        home: const Homescreen(),
+        theme: ThemeData(),
+        home: const Postscreen(),
       ),
     );
   }
