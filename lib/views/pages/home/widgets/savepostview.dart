@@ -3,15 +3,21 @@ import 'package:flutter/material.dart';
 class CustomTextField extends StatelessWidget {
   final int? maxLines;
 
-  final String hintText;
+  final String? hintText;
+  final TextEditingController? controller;
 
-  const CustomTextField({Key? key, this.maxLines, this.hintText = "Title"})
-    : super(key: key);
+  const CustomTextField({
+    Key? key,
+    this.maxLines,
+    this.hintText,
+    this.controller,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
       child: TextFormField(
+        controller: controller,
         textAlign: TextAlign.start,
         textAlignVertical: TextAlignVertical.top,
         maxLines: maxLines,

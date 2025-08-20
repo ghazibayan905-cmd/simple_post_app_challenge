@@ -1,12 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simple_post_app_challenge/core/appColors.dart';
 import 'package:simple_post_app_challenge/core/appimages.dart';
 import 'package:simple_post_app_challenge/views/pages/home/widgets/home.dart';
 import 'package:simple_post_app_challenge/views/pages/home/widgets/postview.dart';
 
 class Postscreen extends StatelessWidget {
-  const Postscreen({super.key});
+  final String post;
+  final int index;
+  const Postscreen({super.key, required this.post, required this.index});
+  Future<void> deletePost(BuildContext context) async {
+    final prefs = await SharedPreferences.getInstance();
+    List<String> posts = prefs.getStringList('posts') ?? [];
+    posts.removeAt(index);
+    await prefs.setStringList('posts', posts);
+    Navigator.pop(context, true);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,11 +32,8 @@ class Postscreen extends StatelessWidget {
                 SizedBox(height: 20),
                 BaseContainer(
                   icon: Icons.delete,
-
-                  Text2:
-                      "sunt aut facere repellat provident occaecat iexcepturi optio repreh enderit",
-                  Text3:
-                      "sunt aut quia et suscipit suscipit recusandae consequuntur expedita et cumreprehende ritmolestiae ut ut quas totam nostrum rerum est autem sunt rem eveniet architecto repellat provident occaecatiexcepturi optio reprehenderit",
+                  onIconTap: () => deletePost(context),
+                  Text2: post, // 👈 
                 ),
                 SizedBox(height: 16.h),
                 Text(

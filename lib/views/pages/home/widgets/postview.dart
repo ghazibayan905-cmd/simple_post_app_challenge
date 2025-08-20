@@ -7,14 +7,21 @@ class BaseContainer extends StatelessWidget {
   final String? Text3;
   final IconData? icon;
   final EdgeInsetsGeometry? padding;
-  const BaseContainer({this.Text2, this.icon, this.padding, this.Text3});
+  final VoidCallback? onIconTap;
+  const BaseContainer({
+    this.Text2,
+    this.icon,
+    this.padding,
+    this.Text3,
+    this.onIconTap,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.only(left: 7.w, right: 10.w),
       width: 387.w,
-      height: 250.h,
+      height: 256.h,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20.r),
         color: AppColors.background,
@@ -23,7 +30,10 @@ class BaseContainer extends StatelessWidget {
         children: [
           Padding(
             padding: EdgeInsets.only(left: 335.w, top: 13.h),
-            child: Icon(icon, color: Colors.red, size: 30),
+            child: IconButton(
+              icon: Icon(icon, color: Colors.red),
+              onPressed: onIconTap,
+            ),
           ),
           SizedBox(height: 13),
           Text(
