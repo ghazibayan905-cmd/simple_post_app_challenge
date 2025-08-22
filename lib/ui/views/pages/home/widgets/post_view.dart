@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:simple_post_app_challenge/core/appColors.dart';
+import 'package:simple_post_app_challenge/core/constant/app_colors.dart';
 
 class BaseContainer extends StatelessWidget {
   final String? Text2;
@@ -23,6 +23,18 @@ class BaseContainer extends StatelessWidget {
       width: 387.w,
       height: 256.h,
       decoration: BoxDecoration(
+
+
+
+
+
+
+
+
+
+
+
+      
         borderRadius: BorderRadius.circular(20.r),
         color: AppColors.background,
       ),

@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:simple_post_app_challenge/core/appimages.dart';
-import 'package:simple_post_app_challenge/views/pages/home/widgets/savepostview.dart';
+import 'package:simple_post_app_challenge/core/constant/app_images.dart';
+import 'package:simple_post_app_challenge/core/enum/request_type.dart';
+import 'package:simple_post_app_challenge/core/network/network_utils.dart';
+import 'package:simple_post_app_challenge/core/post_model.dart';
+import 'package:simple_post_app_challenge/ui/views/pages/home/widgets/add_postview.dart';
 
 class Savepost extends StatefulWidget {
   const Savepost({super.key});
@@ -16,19 +19,28 @@ class _SavepostState extends State<Savepost> {
 
   final TextEditingController _bodyController = TextEditingController();
   Future<void> _savePost() async {
-    final prefs = await SharedPreferences.getInstance();
-
-    List<String> posts = prefs.getStringList("posts") ?? [];
-
     if (_titleController.text.isNotEmpty && _bodyController.text.isNotEmpty) {
-      posts.add("${_titleController.text} : ${_bodyController.text}");
-      await prefs.setStringList("posts", posts);
-
-      Navigator.pop(context, true);
-    } else {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text("الرجاء إدخال العنوان والمحتوى")));
+      NetworkUtil.sendRequest(
+            type: RequestType.POST,
+            url: "posts",
+            headers: {'Content-type': 'application/json; charset=UTF-8'},
+            body: {
+              "title": _titleController.text,
+              "body": _bodyController.text,
+            },
+          )
+          .then((response) {
+            if (response != null) {
+              final newPost = PostModel.fromJson(response);
+              Navigator.pop(context, true);
+            }
+            print("STATUS: ${response.statusCode}");
+          })
+          .catchError((e) {
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text("خطأ: $e")));
+          });
     }
   }
 

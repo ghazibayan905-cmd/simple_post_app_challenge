@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:simple_post_app_challenge/core/appColors.dart';
-import 'package:simple_post_app_challenge/core/appimages.dart';
-import 'package:simple_post_app_challenge/views/pages/home/widgets/home.dart';
-import 'package:simple_post_app_challenge/views/pages/home/widgets/postview.dart';
+import 'package:simple_post_app_challenge/core/constant/app_colors.dart';
+import 'package:simple_post_app_challenge/core/constant/app_images.dart';
+import 'package:simple_post_app_challenge/ui/views/pages/home/widgets/container_post.dart';
+import 'package:simple_post_app_challenge/ui/views/pages/home/widgets/post_view.dart';
 
 class Postscreen extends StatelessWidget {
   final String post;
   final int index;
   const Postscreen({super.key, required this.post, required this.index});
   Future<void> deletePost(BuildContext context) async {
+    
     final prefs = await SharedPreferences.getInstance();
     List<String> posts = prefs.getStringList('posts') ?? [];
     posts.removeAt(index);
@@ -33,7 +34,7 @@ class Postscreen extends StatelessWidget {
                 BaseContainer(
                   icon: Icons.delete,
                   onIconTap: () => deletePost(context),
-                  Text2: post, // 👈 
+                  Text2: post,  
                 ),
                 SizedBox(height: 16.h),
                 Text(
