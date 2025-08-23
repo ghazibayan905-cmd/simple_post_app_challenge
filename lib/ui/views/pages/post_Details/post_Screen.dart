@@ -13,7 +13,7 @@ import 'package:simple_post_app_challenge/ui/views/pages/home/widgets/container_
 import 'package:simple_post_app_challenge/ui/views/pages/home/widgets/post_view.dart';
 
 class Postscreen extends StatelessWidget {
-  final String post;
+  final PostModel post;
   final int index;
   const Postscreen({super.key, required this.post, required this.index});
   Future<void> deletePost(BuildContext context) async {
@@ -35,6 +35,7 @@ class Postscreen extends StatelessWidget {
     // posts.removeAt(index);
     // await prefs.setStringList('posts', posts);
   }
+  
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +52,8 @@ class Postscreen extends StatelessWidget {
                 BaseContainer(
                   icon: Icons.delete,
                   onIconTap: () => deletePost(context),
-                  Text2: post,
+                  Text2: post.title,
+                  Text3: post.body,
                 ),
                 SizedBox(height: 16.h),
                 Text(

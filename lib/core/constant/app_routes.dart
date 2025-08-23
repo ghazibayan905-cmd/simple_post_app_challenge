@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:simple_post_app_challenge/core/post_model.dart';
 import 'package:simple_post_app_challenge/ui/views/pages/add_post.dart';
 import 'package:simple_post_app_challenge/ui/views/pages/home/home_screen.dart';
-import 'package:simple_post_app_challenge/ui/views/pages/post_Screen.dart';
+import 'package:simple_post_app_challenge/ui/views/pages/post_Details/post_Screen.dart';
 
 class AppRoutes {
   // static const String initial = '/';
@@ -17,7 +18,7 @@ class AppRoutes {
     };
   }
 
-  static WidgetBuilder postDetailRoute(String post, int index) {
+  static WidgetBuilder postDetailRoute(PostModel post, int index) {
     return (BuildContext context) => Postscreen(post: post, index: index);
   }
 }

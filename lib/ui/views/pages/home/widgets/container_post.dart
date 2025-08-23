@@ -4,17 +4,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:simple_post_app_challenge/core/constant/app_colors.dart';
 import 'package:simple_post_app_challenge/core/post_model.dart';
-import 'package:simple_post_app_challenge/ui/views/pages/post_Screen.dart';
+import 'package:simple_post_app_challenge/ui/views/pages/post_Details/post_Screen.dart';
 
 class CustomContainer extends StatelessWidget {
   final String title;
   final String body;
   final IconData? icon;
-  final String? post;
+  final PostModel? post;
   final int? index;
   final bool width;
   final Function()? onEnd;
-
+  final VoidCallback? onCommentPressed;
   const CustomContainer({
     Key? key,
     required this.title,
@@ -24,6 +24,7 @@ class CustomContainer extends StatelessWidget {
     this.index,
     required this.width,
     this.onEnd,
+    this.onCommentPressed,
   }) : super(key: key);
 
   @override
@@ -45,8 +46,8 @@ class CustomContainer extends StatelessWidget {
         duration: Duration(seconds: 5),
         curve: Curves.bounceIn,
         padding: EdgeInsets.all(20.w),
-        width: width ? 387.w : 0,
-        height: 160.h,
+        width: width ? 600.w : 0,
+        height: 300.h,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20.r),
           color: AppColors.background,
@@ -66,7 +67,7 @@ class CustomContainer extends StatelessWidget {
                 color: AppColors.green,
                 fontWeight: FontWeight.bold,
               ),
-              maxLines: 2,
+              maxLines: 4,
               softWrap: true,
             ),
             SizedBox(height: 15.h),
@@ -74,8 +75,17 @@ class CustomContainer extends StatelessWidget {
               body,
               style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.normal),
               softWrap: true,
-              maxLines: 2,
+              maxLines: 4,
               overflow: TextOverflow.fade,
+            ),
+            SizedBox(height: 15.h),
+            ElevatedButton(
+              onPressed: onCommentPressed,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.teal,
+                foregroundColor: Colors.white,
+              ),
+              child: const Text("Comment"),
             ),
           ],
         ),

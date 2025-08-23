@@ -1,16 +1,21 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart';
+import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simple_post_app_challenge/core/constant/app_colors.dart';
 import 'package:simple_post_app_challenge/core/constant/app_images.dart';
 import 'package:simple_post_app_challenge/core/constant/app_routes.dart';
 import 'package:simple_post_app_challenge/core/enum/request_type.dart';
+import 'package:simple_post_app_challenge/core/network/comment_model.dart';
 import 'package:simple_post_app_challenge/core/network/network_utils.dart';
 import 'package:simple_post_app_challenge/core/post_model.dart';
+import 'package:simple_post_app_challenge/ui/views/pages/home/widgets/bottom_sheet.dart';
 import 'package:simple_post_app_challenge/ui/views/pages/home/widgets/container_post.dart';
-import 'package:simple_post_app_challenge/ui/views/pages/post_Screen.dart';
+import 'package:simple_post_app_challenge/ui/views/pages/post_Details/post_Screen.dart';
 import 'package:simple_post_app_challenge/ui/views/pages/add_post.dart';
 
 class Homescreen extends StatefulWidget {
@@ -22,6 +27,7 @@ class Homescreen extends StatefulWidget {
 
 class _HomescreenState extends State<Homescreen> {
   List<PostModel> posts = [];
+  List<CommentModel> comment = [];
   List<bool> expandContainers = [];
   @override
   void initState() {
@@ -31,21 +37,19 @@ class _HomescreenState extends State<Homescreen> {
 
   Future<void> _loadPosts() async {
     // final prefs = await SharedPreferences.getInstance();
-
     await NetworkUtil.sendRequest(
       type: RequestType.GET,
       url: "posts",
       headers: {'Content-type': 'application/json; charset=UTF-8'},
     ).then((response) {
-      // if(response!=null)
-      // if(response["statusCode"]==200)
-      for (Map<String, dynamic> post in response["response"]) {
-        posts.add(PostModel.fromJson(post));
-      }
-
+      if (response != null)
+        if (response["statusCode"] == 200)
+          for (Map<String, dynamic> post in response["response"]) {
+            posts.add(PostModel.fromJson(post));
+          }
       setState(() {
         // posts = prefs.getStringList('posts') ?? [];
-        print(posts.length);
+        // print(posts.length);
         expandContainers = List.filled(posts.length, false);
         for (int i = 0; i < posts.length; i++) {
           Future.delayed(Duration(milliseconds: 500), () {
@@ -56,6 +60,21 @@ class _HomescreenState extends State<Homescreen> {
         }
       });
     });
+  }
+
+  Future<List<CommentModel>> getComments(int postId) async {
+    final response = await NetworkUtil.sendRequest(
+      type: RequestType.GET,
+      url: "posts/$postId/comments",
+      headers: {'Content-type': 'application/json; charset=UTF-8'},
+    );
+
+    if (response != null) {
+      final commentsJson = response["response"] as List<dynamic>;
+      return commentsJson.map((c) => CommentModel.fromJson(c)).toList();
+    }
+
+    return [];
   }
 
   @override
@@ -88,24 +107,23 @@ class _HomescreenState extends State<Homescreen> {
               Center(child: Image.asset(Appimage.socialhub)),
               SizedBox(height: 20.h),
 
-              CustomContainer(
-                width: true,
-                title:
-                    "sunt aut facere repellat provident occaecatiexcepturi optio reprehenderit",
-                body: "mn",
-              ),
-              SizedBox(height: 22.h),
-
-              SizedBox(height: 22.h),
-
               for (var i = 0; i < posts.length; i++) ...[
                 CustomContainer(
                   width: expandContainers[i],
 
-                  title: posts[i].title!,
-                  post: posts[i].title,
+                  title: posts[i].title.toString(),
+                  post: posts[i],
                   index: i,
-                  body: posts[i].body!,
+                  body: posts[i].body ?? "no body",
+                  onCommentPressed: () async {
+                    final comments = await getComments(posts[i].id!);
+                    showModalBottomSheet(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return BuildSheet(comments: comments);
+                      },
+                    );
+                  },
                 ),
                 SizedBox(height: 16.h),
               ],

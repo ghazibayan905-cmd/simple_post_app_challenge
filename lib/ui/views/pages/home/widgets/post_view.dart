@@ -20,21 +20,9 @@ class BaseContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.only(left: 7.w, right: 10.w),
-      width: 387.w,
-      height: 256.h,
+      width: 390.w,
+      height: 270.h,
       decoration: BoxDecoration(
-
-
-
-
-
-
-
-
-
-
-
-      
         borderRadius: BorderRadius.circular(20.r),
         color: AppColors.background,
       ),
