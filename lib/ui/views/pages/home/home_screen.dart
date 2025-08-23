@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -36,45 +37,67 @@ class _HomescreenState extends State<Homescreen> {
   }
 
   Future<void> _loadPosts() async {
-    // final prefs = await SharedPreferences.getInstance();
-    await NetworkUtil.sendRequest(
-      type: RequestType.GET,
-      url: "posts",
-      headers: {'Content-type': 'application/json; charset=UTF-8'},
-    ).then((response) {
-      if (response != null)
-        if (response["statusCode"] == 200)
+    try {
+      final response = await NetworkUtil.sendRequest(
+        type: RequestType.GET,
+        url: "posts",
+        headers: {'Content-type': 'application/json; charset=UTF-8'},
+      );
+
+      if (response != null) {
+        if (response["statusCode"] == 200) {
           for (Map<String, dynamic> post in response["response"]) {
             posts.add(PostModel.fromJson(post));
           }
-      setState(() {
-        // posts = prefs.getStringList('posts') ?? [];
-        // print(posts.length);
-        expandContainers = List.filled(posts.length, false);
-        for (int i = 0; i < posts.length; i++) {
-          Future.delayed(Duration(milliseconds: 500), () {
-            setState(() {
-              expandContainers[i] = true;
-            });
-          });
         }
-      });
-    });
+
+        setState(() {
+          expandContainers = List.filled(posts.length, false);
+          for (int i = 0; i < posts.length; i++) {
+            Future.delayed(const Duration(milliseconds: 500), () {
+              setState(() {
+                expandContainers[i] = true;
+              });
+            });
+          }
+        });
+      }
+    } on SocketException {
+    } catch (e) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("خطأ: $e")));
+    }
   }
 
   Future<List<CommentModel>> getComments(int postId) async {
-    final response = await NetworkUtil.sendRequest(
-      type: RequestType.GET,
-      url: "posts/$postId/comments",
-      headers: {'Content-type': 'application/json; charset=UTF-8'},
-    );
+    try {
+      final response = await NetworkUtil.sendRequest(
+        type: RequestType.GET,
+        url: "posts/$postId/comments",
+        headers: {'Content-type': 'application/json; charset=UTF-8'},
+      );
 
-    if (response != null) {
-      final commentsJson = response["response"] as List<dynamic>;
-      return commentsJson.map((c) => CommentModel.fromJson(c)).toList();
+      if (response != null) {
+        switch (response["statusCode"]) {
+          case 200:
+            final commentsJson = response["response"] as List<dynamic>;
+            return commentsJson.map((c) => CommentModel.fromJson(c)).toList();
+
+          case 400:
+            throw Exception(response["error"]);
+
+          default:
+            throw Exception("Unable to load comments, please try again");
+        }
+      }
+
+      return [];
+    } on SocketException {
+      throw Exception("لا يوجد اتصال بالإنترنت");
+    } catch (e) {
+      throw Exception("خطأ غير متوقع: $e");
     }
-
-    return [];
   }
 
   @override

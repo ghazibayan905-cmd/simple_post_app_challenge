@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -20,27 +22,31 @@ class _SavepostState extends State<Savepost> {
   final TextEditingController _bodyController = TextEditingController();
   Future<void> _savePost() async {
     if (_titleController.text.isNotEmpty && _bodyController.text.isNotEmpty) {
-      NetworkUtil.sendRequest(
-            type: RequestType.POST,
-            url: "posts",
-            headers: {'Content-type': 'application/json; charset=UTF-8'},
-            body: {
-              "title": _titleController.text,
-              "body": _bodyController.text,
-            },
-          )
-          .then((response) {
-            if (response != null) {
-              final newPost = PostModel.fromJson(response);
+      try {
+        final response = await NetworkUtil.sendRequest(
+          type: RequestType.POST,
+          url: "posts",
+          headers: {'Content-type': 'application/json; charset=UTF-8'},
+          body: {"title": _titleController.text, "body": _bodyController.text},
+        );
+
+        if (response != null) {
+          switch (response["statusCode"]) {
+            case 200:
+              final newPost = PostModel.fromJson(response["response"]);
               Navigator.pop(context, true);
-            }
-            print("STATUS: ${response.statusCode}");
-          })
-          .catchError((e) {
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(SnackBar(content: Text("خطأ: $e")));
-          });
+              break;
+            case 400:
+              throw Exception(response["error"]);
+            default:
+              throw Exception("Unable to save post, please try again");
+          }
+        }
+      } catch (e) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text("error occured $e")));
+      }
     }
   }
 

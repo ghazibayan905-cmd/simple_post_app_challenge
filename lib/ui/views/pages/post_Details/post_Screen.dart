@@ -29,13 +29,7 @@ class Postscreen extends StatelessWidget {
         Navigator.pop(context, true);
       }
     });
-
-    // final prefs = await SharedPreferences.getInstance();
-    // List<String> posts = prefs.getStringList('posts') ?? [];
-    // posts.removeAt(index);
-    // await prefs.setStringList('posts', posts);
   }
-  
 
   @override
   Widget build(BuildContext context) {
