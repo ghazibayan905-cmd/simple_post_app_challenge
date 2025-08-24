@@ -98,116 +98,133 @@ class _HomescreenState extends State<Homescreen> {
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: SafeArea(
-        child: CustomScrollView(
-          slivers: [
-            SliverAppBar(
-              pinned: true,
-              floating: false,
-              snap: false,
-              expandedHeight: 180.h,
-              backgroundColor: Colors.transparent,
-              flexibleSpace: ClipRRect(
-                borderRadius: BorderRadius.vertical(
-                  bottom: Radius.circular(40.r),
-                ),
-                child: Container(
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        Colors.white.withOpacity(0.3),
-                        const Color.fromARGB(
-                          255,
-                          194,
-                          192,
-                          192,
-                        ).withOpacity(0.2),
-                      ],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
-                  ),
-                  child: SafeArea(
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 16.w),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Expanded(
-                            child: Center(
-                              child: AnimatedScale(
-                                scale: 1.1,
-                                duration: const Duration(milliseconds: 600),
-                                curve: Curves.easeInOut,
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: CustomScrollView(
+            slivers: [
+              SliverAppBar(
+                pinned: true,
+                floating: false,
+                snap: false,
+                expandedHeight: 220.h,
+                backgroundColor: Colors.transparent,
+                flexibleSpace: LayoutBuilder(
+                  builder: (BuildContext context, BoxConstraints constraints) {
+                    // حساب نسبة التمرير بين الحد الأقصى والأدنى
+                    double maxHeight = 220.h;
+                    double minHeight = kToolbarHeight;
+                    double percent =
+                        ((constraints.maxHeight - minHeight) /
+                                (maxHeight - minHeight))
+                            .clamp(0.0, 1.0);
+
+                    double logoSize =
+                        80.h + (40.h * percent); // الشعار يكبر من 80h إلى 120h
+
+                    return ClipRRect(
+                      borderRadius: BorderRadius.vertical(
+                        bottom: Radius.circular(40.r),
+                      ),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [
+                              const Color.fromARGB(
+                                255,
+                                168,
+                                168,
+                                168,
+                              ).withOpacity(0.3),
+                              const Color.fromARGB(
+                                255,
+                                194,
+                                192,
+                                192,
+                              ).withOpacity(0.2),
+                            ],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),
+                        ),
+                        child: Stack(
+                          children: [
+                            Center(
+                              child: AnimatedContainer(
+                                duration: const Duration(milliseconds: 200),
+                                height: logoSize,
                                 child: Image.asset(
                                   Appimage.socialhub,
-                                  height: 100.h,
                                   fit: BoxFit.contain,
                                 ),
                               ),
                             ),
-                          ),
-
-                          InkWell(
-                            onTap: () async {
-                              final result = await Navigator.pushNamed(
-                                context,
-                                AppRoutes.addPost,
-                              );
-                              if (result == true) _loadPosts();
-                            },
-                            borderRadius: BorderRadius.circular(50.r),
-                            child: Container(
-                              padding: EdgeInsets.all(8.w),
-                              decoration: BoxDecoration(
-                                color: Colors.white.withOpacity(0.3),
-                                shape: BoxShape.circle,
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black26,
-                                    blurRadius: 6,
-                                    offset: const Offset(2, 2),
+                            Positioned(
+                              top: 16.h,
+                              right: 16.w,
+                              child: InkWell(
+                                onTap: () async {
+                                  final result = await Navigator.pushNamed(
+                                    context,
+                                    AppRoutes.addPost,
+                                  );
+                                  if (result == true) _loadPosts();
+                                },
+                                borderRadius: BorderRadius.circular(50.r),
+                                child: Container(
+                                  padding: EdgeInsets.all(8.w),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white.withOpacity(0.3),
+                                    shape: BoxShape.circle,
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black26,
+                                        blurRadius: 6,
+                                        offset: const Offset(2, 2),
+                                      ),
+                                    ],
                                   ),
-                                ],
-                              ),
-                              child: SvgPicture.asset(
-                                Appimage.create_note,
-                                height: 28.h,
+                                  child: SvgPicture.asset(
+                                    Appimage.create_note,
+                                    height: 30.h,
+                                  ),
+                                ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                  ),
+                    );
+                  },
                 ),
               ),
-            ),
-            SliverToBoxAdapter(child: SizedBox(height: 20.h)),
 
-            SliverList(
-              delegate: SliverChildBuilderDelegate((context, index) {
-                return Padding(
-                  padding: EdgeInsets.only(bottom: 16.h),
-                  child: CustomContainer(
-                    width: expandContainers[index],
-                    title: posts[index].title.toString(),
-                    post: posts[index],
-                    index: index,
-                    body: posts[index].body ?? "no body",
-                    onCommentPressed: () async {
-                      final comments = await getComments(posts[index].id!);
-                      showModalBottomSheet(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return BuildSheet(comments: comments);
-                        },
-                      );
-                    },
-                  ),
-                );
-              }, childCount: posts.length),
-            ),
-          ],
+              SliverToBoxAdapter(child: SizedBox(height: 20.h)),
+
+              SliverList(
+                delegate: SliverChildBuilderDelegate((context, index) {
+                  return Padding(
+                    padding: EdgeInsets.only(bottom: 16.h),
+                    child: CustomContainer(
+                      width: expandContainers[index],
+                      title: posts[index].title.toString(),
+                      post: posts[index],
+                      index: index,
+                      body: posts[index].body ?? "no body",
+                      onCommentPressed: () async {
+                        final comments = await getComments(posts[index].id!);
+                        showModalBottomSheet(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return BuildSheet(comments: comments);
+                          },
+                        );
+                      },
+                    ),
+                  );
+                }, childCount: posts.length),
+              ),
+            ],
+          ),
         ),
       ),
     );

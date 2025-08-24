@@ -53,6 +53,7 @@ class _SavepostState extends State<Savepost> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.transparent,
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.only(left: 24.w, right: 18.w),

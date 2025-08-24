@@ -37,7 +37,7 @@ class Postscreen extends StatelessWidget {
       backgroundColor: Colors.transparent,
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.only(left: 19.0),
+          padding: EdgeInsets.only(left: 19.w, right: 19.w),
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

@@ -17,16 +17,11 @@ class MyApp extends StatelessWidget {
         return Container(
           decoration: const BoxDecoration(
             gradient: LinearGradient(
-              begin: Alignment.topCenter,
+              begin: Alignment.topLeft,
               end: Alignment.bottomRight,
               colors: [
-                Color.fromRGBO(216, 225, 233, 0),
-                Color.fromRGBO(47, 61, 74, 0),
-                Color.fromRGBO(47, 61, 74, 0),
-                Color.fromRGBO(12, 181, 149, 0.34),
-                Color.fromRGBO(12, 181, 149, 0.47),
-                Color.fromRGBO(12, 181, 149, 0.47),
-                Color.fromRGBO(12, 181, 149, 0.40),
+                Color(0xFFE0F2F1), 
+                Color(0xFFF1F8E9), 
               ],
             ),
           ),
@@ -37,7 +32,7 @@ class MyApp extends StatelessWidget {
 
       child: MaterialApp(
         routes: AppRoutes.getRoutes(context),
-        initialRoute: AppRoutes.home ,
+        initialRoute: AppRoutes.home,
         debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
         theme: ThemeData(),

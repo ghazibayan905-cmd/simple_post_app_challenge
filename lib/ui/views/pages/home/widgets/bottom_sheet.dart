@@ -11,21 +11,52 @@ class BuildSheet extends StatelessWidget {
     return Container(
       height: 400,
       padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            blurRadius: 12,
+            offset: const Offset(0, -3),
+          ),
+        ],
+      ),
       child: comments.isEmpty
-          ? const Center(child: Text("No Comments"))
+          ? const Center(
+              child: Text(
+                "No Comments",
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.grey,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            )
           : ListView.separated(
               itemCount: comments.length,
-              separatorBuilder: (context, index) => const SizedBox(height: 16),
+              separatorBuilder: (context, index) => const SizedBox(height: 12),
               itemBuilder: (context, index) {
                 final c = comments[index];
-                return Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
+                return Container(
+                  decoration: BoxDecoration(
+                    color: Colors.teal[50],
+                    borderRadius: BorderRadius.circular(16),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.05),
+                        blurRadius: 6,
+                        offset: const Offset(0, 3),
+                      ),
+                    ],
                   ),
-                  elevation: 2,
                   child: ListTile(
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 8,
+                    ),
                     title: Text(
-                      c.name!,
+                      c.name ?? '',
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 16,
@@ -33,16 +64,17 @@ class BuildSheet extends StatelessWidget {
                       ),
                     ),
                     subtitle: Text(
-                      c.body!,
-                      style: TextStyle(color: Colors.black),
-                      maxLines: 2,
+                      c.body ?? '',
+                      style: const TextStyle(color: Colors.black87),
+                      maxLines: 3,
                       overflow: TextOverflow.ellipsis,
                     ),
                     trailing: Text(
-                      c.email!,
+                      c.email ?? '',
                       style: const TextStyle(
-                        fontSize: 11,
-                        color: Color.fromARGB(255, 49, 49, 49),
+                        fontSize: 12,
+                        color: Colors.grey,
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
                   ),

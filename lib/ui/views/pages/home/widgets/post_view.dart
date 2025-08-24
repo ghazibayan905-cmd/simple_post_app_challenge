@@ -8,6 +8,7 @@ class BaseContainer extends StatelessWidget {
   final IconData? icon;
   final EdgeInsetsGeometry? padding;
   final VoidCallback? onIconTap;
+
   const BaseContainer({
     this.Text2,
     this.icon,
@@ -19,38 +20,59 @@ class BaseContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(left: 7.w, right: 10.w),
-      width: 390.w,
-      height: 270.h,
+      padding: padding ?? EdgeInsets.all(8.w),
+      width: double.infinity,
+      height: 280.h,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20.r),
-        color: AppColors.background,
+        gradient: LinearGradient(
+          colors: [Colors.teal[50]!, Colors.teal[100]!],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.08),
+            blurRadius: 10,
+            offset: const Offset(0, 5),
+          ),
+        ],
       ),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding: EdgeInsets.only(left: 335.w, top: 13.h),
+          Align(
+            alignment: Alignment.topRight,
             child: IconButton(
-              icon: Icon(icon, color: Colors.red),
+              icon: Icon(
+                icon ?? Icons.close,
+                color: Colors.redAccent,
+                size: 28.sp,
+              ),
               onPressed: onIconTap,
             ),
           ),
-          SizedBox(height: 13),
+          SizedBox(height: 12.h),
           Text(
             Text2 ?? "",
             style: TextStyle(
-              fontSize: 15.sp,
-              color: AppColors.green,
+              fontSize: 18.sp,
+              color: Colors.teal[900],
               fontWeight: FontWeight.bold,
             ),
-            softWrap: true,
           ),
-          SizedBox(height: 15.h),
-          Text(
-            Text3 ?? "",
-
-            style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.normal),
-            softWrap: true,
+          SizedBox(height: 10.h),
+          Expanded(
+            child: SingleChildScrollView(
+              child: Text(
+                Text3 ?? "",
+                style: TextStyle(
+                  fontSize: 16.sp,
+                  color: Colors.grey[800],
+                  fontWeight: FontWeight.normal,
+                ),
+              ),
+            ),
           ),
         ],
       ),
