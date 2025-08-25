@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -18,8 +17,8 @@ class Savepost extends StatefulWidget {
 
 class _SavepostState extends State<Savepost> {
   final TextEditingController _titleController = TextEditingController();
-
   final TextEditingController _bodyController = TextEditingController();
+
   Future<void> _savePost() async {
     if (_titleController.text.isNotEmpty && _bodyController.text.isNotEmpty) {
       try {
@@ -31,22 +30,51 @@ class _SavepostState extends State<Savepost> {
         );
 
         if (response != null) {
-          switch (response["statusCode"]) {
+          final statusCode = response["statusCode"] is String
+              ? int.tryParse(response["statusCode"]) ?? 0
+              : response["statusCode"];
+
+          switch (statusCode) {
             case 200:
+            case 201:
               final newPost = PostModel.fromJson(response["response"]);
-              Navigator.pop(context, true);
+
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text("✅ تم الحفظ بنجاح"),
+                  backgroundColor: Colors.green,
+                  duration: Duration(seconds: 2),
+                  behavior: SnackBarBehavior.floating,
+                ),
+              );
+
+              Future.delayed(const Duration(seconds: 2), () {
+                if (mounted) Navigator.pop(context, true);
+              });
               break;
+
             case 400:
               throw Exception(response["error"]);
+
             default:
-              throw Exception("Unable to save post, please try again");
+              throw Exception(
+                "Unable to save post, please try again (status: $statusCode)",
+              );
           }
         }
       } catch (e) {
         ScaffoldMessenger.of(
           context,
-        ).showSnackBar(SnackBar(content: Text("error occured $e")));
+        ).showSnackBar(SnackBar(content: Text(" error occurred: $e")));
       }
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(" الرجاء إدخال العنوان والمحتوى"),
+          backgroundColor: Colors.red,
+          duration: Duration(seconds: 2),
+        ),
+      );
     }
   }
 
@@ -88,15 +116,17 @@ class _SavepostState extends State<Savepost> {
                 ElevatedButton(
                   onPressed: _savePost,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xff30404D),
+                    backgroundColor: const Color(0xff30404D),
                     minimumSize: Size(392.w, 60.h),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
-                      side: BorderSide(color: Color(0xff13B493), width: 2),
+                      side: const BorderSide(
+                        color: Color(0xff13B493),
+                        width: 2,
+                      ),
                     ),
                   ),
-
-                  child: Text(
+                  child: const Text(
                     "Save",
                     style: TextStyle(
                       color: Colors.white,

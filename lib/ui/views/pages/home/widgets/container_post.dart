@@ -25,7 +25,6 @@ class CustomContainer extends StatelessWidget {
     this.onCommentPressed,
   }) : super(key: key);
 
-  // قائمة تدرجات لونية مختلفة لكل بوست
   LinearGradient getGradient(int index) {
     List<LinearGradient> gradients = [
       LinearGradient(colors: [Color(0xFFE0F7FA), Color(0xFFB2EBF2)]),

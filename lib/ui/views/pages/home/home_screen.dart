@@ -119,7 +119,7 @@ class _HomescreenState extends State<Homescreen> {
                             .clamp(0.0, 1.0);
 
                     double logoSize =
-                        80.h + (40.h * percent); // الشعار يكبر من 80h إلى 120h
+                        80.h + (40.h * percent); 
 
                     return ClipRRect(
                       borderRadius: BorderRadius.vertical(

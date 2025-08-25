@@ -21,8 +21,8 @@ class BaseContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: padding ?? EdgeInsets.all(8.w),
-      width: double.infinity,
-      height: 280.h,
+      width: 400.w,
+      height: 300.h,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20.r),
         gradient: LinearGradient(
@@ -44,14 +44,27 @@ class BaseContainer extends StatelessWidget {
           Align(
             alignment: Alignment.topRight,
             child: IconButton(
-              icon: Icon(
-                icon ?? Icons.close,
-                color: Colors.redAccent,
-                size: 28.sp,
-              ),
-              onPressed: onIconTap,
+              icon: Icon(icon),
+              color: AppColors.red,
+              onPressed: () {
+                if (onIconTap != null) onIconTap!();
+
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text("The deletion was successful"),
+                    behavior: SnackBarBehavior.floating,
+                    backgroundColor: const Color.fromARGB(255, 63, 65, 64),
+                    duration: Duration(seconds: 3),
+                  ),
+                );
+
+                Future.delayed(Duration(seconds: 1), () {
+                  Navigator.of(context).pushReplacementNamed('/home');
+                });
+              },
             ),
           ),
+
           SizedBox(height: 12.h),
           Text(
             Text2 ?? "",
@@ -62,16 +75,12 @@ class BaseContainer extends StatelessWidget {
             ),
           ),
           SizedBox(height: 10.h),
-          Expanded(
-            child: SingleChildScrollView(
-              child: Text(
-                Text3 ?? "",
-                style: TextStyle(
-                  fontSize: 16.sp,
-                  color: Colors.grey[800],
-                  fontWeight: FontWeight.normal,
-                ),
-              ),
+          Text(
+            Text3 ?? "",
+            style: TextStyle(
+              fontSize: 16.sp,
+              color: Colors.grey[800],
+              fontWeight: FontWeight.normal,
             ),
           ),
         ],
